@@ -1,28 +1,18 @@
-import numpy
+import numpy as np
 
-# Defines the amount of rows and columns
-rows = 100      # <---- CHANGE THIS
-columns = 100    # <---- CHANGE THIS
+# Defines the amount of rows & columns and the step size
+rows = 100        # <---- CHANGE THIS
+columns = 100     # <---- CHANGE THIS
+step_size = 0.01  # <---- CHANGE THIS
 
-formula = "x + y * i"
+# Does literally everything. It makes the entire array.
+def arraymaker():
+    arr = np.zeros((columns + 1, rows + 1), dtype=np.complex64)
+    for i in range(0, rows + 1):
+        for p in range(0, columns + 1):
+            arr[i][p] = complex(i * step_size, p * step_size)
+    return arr
 
-def main():
-    adone, a, newlist, tmp = [], [], [], []
-    # Creates first row
-    tmp = [formula.replace("y", str(round(i * 0.01, 2))) for i in range(0, rows + 1)]
-    # Duplicates the row but fills in y correctly
-    for i in range(0, columns + 1):
-        a.append(tmp)
-    adone = [[u.replace("x", str(round((p - 1) * 0.01, 2))) for p, u in enumerate(a[i], 1)] for i in range(0, columns + 1)]
-    return adone
-
-# Starts the program
 if __name__ == '__main__':
-    adone = main()
-    data = numpy.array([adone])
-    print(data)
-
-
-
-
-
+    arr = arraymaker()
+    print(arr)
