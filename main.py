@@ -32,7 +32,6 @@ arr = createBaseComplexImageMatrix(-2,-2,2,2,0.001)
 out = generateSet(arr, 100)
 t1 = time.time()
 print(t1-t0)
-
-
+torch.save(out, "image.pt")
 
 # 21.363631010055542
