@@ -3,10 +3,14 @@ import time, warnings
 
 warnings.filterwarnings('ignore')
 
+device = torch.device("cpu")
+if torch.has_cuda and torch.has_cudnn:
+    device = torch.device("cuda")
+
 def createBaseComplexImageMatrix(start_real, start_imag, end_real, end_imag, step):
     real, imag = torch.meshgrid(
-        torch.arange(start_real, end_real+step, step),
-        torch.arange(start_imag, end_imag+step, step)
+        torch.arange(start_real, end_real+step, step, device=device),
+        torch.arange(start_imag, end_imag+step, step, device=device)
         )
     return real + imag * complex(0,1)
 
@@ -23,7 +27,7 @@ def generateSet(c, interations):
     z = torch.clone(c)
     for iteration in range(interations):
         z = generatorStep(z,c)
-    return torch.abs(z) < 2
+    return (torch.abs(z) < 2).to(torch.device("cpu"))
     
 
 
@@ -33,5 +37,6 @@ out = generateSet(arr, 100)
 t1 = time.time()
 print(t1-t0)
 torch.save(out, "image.pt")
+
 
 # 21.363631010055542
