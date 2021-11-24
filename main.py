@@ -1,4 +1,5 @@
 import torch
+import numpy as np
 import time, warnings
 
 warnings.filterwarnings('ignore')
@@ -14,29 +15,31 @@ def createBaseComplexImageMatrix(start_real, start_imag, end_real, end_imag, ste
         )
     return real + imag * complex(0,1)
 
-def generatorStep(z, c):
+def generatorStep(z, c, count):
     "return z^2+c"
     mask = torch.where(torch.abs(z) <= 2)
     z_masked = z[mask]
     c_masked = c[mask]
     z[mask] =  z_masked**2+c_masked
+    count[mask] += 1
     return z
 
 def generateSet(c, interations):
     "generate the set for values c for interations interations"
     z = torch.clone(c)
+    count = torch.zeros_like(c, dtype=torch.int, device=device)
     for iteration in range(interations):
-        z = generatorStep(z,c)
-    return (torch.abs(z) < 2).to(torch.device("cpu"))
+        z = generatorStep(z,c, count)
+    return count.to(torch.device("cpu"))
     
 
 
 t0 = time.time()
 arr = createBaseComplexImageMatrix(-2,-2,2,2,0.001)
-out = generateSet(arr, 10000)
+out = generateSet(arr, 100)
 t1 = time.time()
 print(t1-t0)
-torch.save(out.cpu(), "image.pt")
+np.save("image.npy", out.cpu().numpy())
 
 
 # 21.363631010055542

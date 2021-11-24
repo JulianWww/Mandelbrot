@@ -1,7 +1,7 @@
-import torch
+import numpy as np
 import matplotlib.pyplot as plt
 
-arr = torch.load("image.pt")
+arr = np.load("image.npy")
 plt.imshow(arr, cmap=plt.cm.binary)
 plt.show()
 
