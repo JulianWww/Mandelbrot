@@ -36,7 +36,7 @@ def generateSet(c, interations):
 
 t0 = time.time()
 arr = createBaseComplexImageMatrix(-2,-2,2,2,0.001)
-out = generateSet(arr, 100)
+out = generateSet(arr, 1000)
 t1 = time.time()
 print(t1-t0)
 np.save("image.npy", out.cpu().numpy())
